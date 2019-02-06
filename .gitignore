@@ -1,0 +1,15 @@
+.idea/
+.doit.db
+__pycache__/
+node_modules/
+.venv/
+
+static/css/*.css
+static/css/*.css.map
+media/
+static-collected/
+*.mo
+
+.env
+
+temporary.db
