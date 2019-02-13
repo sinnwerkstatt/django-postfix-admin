@@ -22,7 +22,7 @@ class MailboxAdmin(admin.ModelAdmin):
 
 @register(Alias)
 class AliasAdmin(admin.ModelAdmin):
-    list_display = ['name', 'domain', 'target', 'active']
+    list_display = ['name', 'domain', 'targets', 'active']
 
 
 @register(TLSPolicy)

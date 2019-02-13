@@ -69,7 +69,7 @@ class Mailbox(models.Model):
 class Alias(models.Model):
     name = models.CharField(max_length=255)
     domain = models.ForeignKey(Domain, on_delete=models.PROTECT)
-    target = models.CharField(max_length=255, help_text='You can specify multiple recipients with commas, i.e.: x@foo.com,y@bar.com')
+    targets = models.TextField(help_text='You can specify multiple recipients, one per line.')
 
     description = models.CharField(max_length=500, blank=True)
 
@@ -79,8 +79,11 @@ class Alias(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}@{} → {}".format(self.name, self.domain.name, self.target)
+        return "{}@{} → {}".format(self.name, self.domain.name, ",".join(self.targets.split('\n')))
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        super(Alias, self).save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     class Meta:
         unique_together = ('name', 'domain')
         verbose_name_plural = 'Aliases'
