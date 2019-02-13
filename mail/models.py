@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -20,24 +21,6 @@ class Domain(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['name']
-
-
-class AliasDomain(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    target = models.ForeignKey(Domain, on_delete=models.PROTECT)
-    description = models.CharField(max_length=500, blank=True)
-
-    active = models.BooleanField(default=True)
-
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "{} → {}".format(self.name, self.target)
-
-    class Meta:
-        verbose_name_plural = 'AliasDomains'
         ordering = ['name']
 
 
@@ -65,6 +48,15 @@ class Mailbox(models.Model):
     def show_aliases(self):
         return Alias.objects.filter(targets__icontains=f"{self.name}@{self.domain_id}")
 
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude)
+        qs = Alias.objects.filter(name=self.name, domain=self.domain)
+        if qs.exists():
+            raise ValidationError(
+                message=f"An Alias named {self.name}@{self.domain_id} already exists.",
+                code='unique_together'
+            )
+
 
 class Alias(models.Model):
     name = models.CharField(max_length=255)
@@ -89,6 +81,15 @@ class Alias(models.Model):
         unique_together = ('name', 'domain')
         verbose_name_plural = 'Aliases'
         ordering = ['name']
+
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude)
+        qs = Mailbox.objects.filter(name=self.name, domain=self.domain)
+        if qs.exists():
+            raise ValidationError(
+                message=f"A Mailbox named {self.name}@{self.domain_id} already exists.",
+                code='unique_together'
+            )
 
 
 class TLSPolicy(models.Model):

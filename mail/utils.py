@@ -45,13 +45,17 @@ class Database:
 
         alldings = {
             'accounts.cf': "SELECT 1 AS found FROM mail_mailbox WHERE name ='%u' AND domain_id ='%d' AND active=true LIMIT 1;",
-            'aliases.cf': "SELECT regexp_replace(targets, '[\n\r]+', ',', 'g' ) AS destination FROM mail_alias WHER name = '%u' AND domain_id='%d' AND active=true;",
+            'aliases.cf': "SELECT regexp_replace(targets, '[\\n\\r]+', ',', 'g') AS destination FROM mail_alias WHER name = '%u' AND domain_id='%d' AND active=true;",
             'domains.cf': "SELECT name FROM mail_domain WHERE name='%d';",
             'sender-login-maps.cf': "select name || '@' || domain_id as owns from mail_mailbox where name ='%u' and domain_id ='%d' and active = true union select name || '@' || domain_id as owns from mail_alias where name = '%u' and domain_id='%d' and active=true;",
             'tls-policy.cf': "SELECT policy, params FROM mail_tlspolicy WHERE domain = '%d';"
 
         }
-        return "\n".join([connect,'xx'])
+        ret = ""
+        for k,v in alldings.items():
+            ret += f"{k}:\n" + "\n".join([connect, v]) + "\n\n"
+        return ret
+        # return "\n".join([connect,'xx'])
 
 
     # TODO: fix 1 != true
