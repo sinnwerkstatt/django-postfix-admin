@@ -14,10 +14,13 @@ class Domain(models.Model):
         return self.mailbox_set.all().count()
 
     def aliases(self):
-        return self.aliasdomain_set.all().count()
+        return self.alias_set.all().count()
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['name']
 
 
 class AliasDomain(models.Model):
@@ -35,6 +38,7 @@ class AliasDomain(models.Model):
 
     class Meta:
         verbose_name_plural = 'AliasDomains'
+        ordering = ['name']
 
 
 class Mailbox(models.Model):
@@ -56,9 +60,10 @@ class Mailbox(models.Model):
     class Meta:
         unique_together = ('name', 'domain')
         verbose_name_plural = 'Mailboxes'
+        ordering = ['name']
 
     def show_aliases(self):
-        return Alias.objects.filter(target=f"{self.name}@{self.domain_id}")
+        return Alias.objects.filter(target__icontains=f"{self.name}@{self.domain_id}")
 
 
 class Alias(models.Model):
@@ -79,6 +84,7 @@ class Alias(models.Model):
     class Meta:
         unique_together = ('name', 'domain')
         verbose_name_plural = 'Aliases'
+        ordering = ['name']
 
 
 class TLSPolicy(models.Model):
@@ -101,3 +107,4 @@ class TLSPolicy(models.Model):
     class Meta:
         verbose_name = 'TLS Policy'
         verbose_name_plural = 'TLS Policies'
+        ordering = ['domain']
