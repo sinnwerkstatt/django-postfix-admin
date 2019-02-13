@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+    <title>Django Postfix Admin</title>
+    <style>
+        pre {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+<h1>Django Postfix Admin, also for Dovecot</h1>
+<h2>Go To Admin</h2>
+<a href="/admin">Admin Dashboard</a>
+<h2>Postfix and Dovecot configurations</h2>
+<h3>Dovecot</h3>
+<div>
+    /etc/dovecot/dovecot-sql.conf:
+    <pre>{{ dovecot }}</pre>
+</div>
+<div>
+    <p>To your /etc/dovecot/dovecot.conf, you will need to add something like this:</p>
+    <pre>
+passdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-sql.conf
+}
+userdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-sql.conf
+}
+</pre>
+</div>
+
+<h3>Postfix</h3>
+<div>
+    /etc/postfix/{{ driver}}:
+    <pre>{{ postfix }}</pre>
+</div>
+<div>
+    <p>To /etc/postfix/main.cf you will need to add something like this:</p>
+    <pre>
+smtpd_sender_login_maps={{ driver }}:/etc/postfix/{{ driver }}/sender-login-maps.cf
+smtp_tls_policy_maps = {{ driver }}:/etc/postfix/{{ driver }}/tls-policy.cf
+virtual_alias_maps = {{ driver }}:/etc/postfix/{{ driver }}/aliases.cf
+virtual_mailbox_maps = {{ driver }}:/etc/postfix/{{ driver }}/accounts.cf
+virtual_mailbox_domains = {{ driver }}:/etc/postfix/{{ driver }}/domains.cf
+</pre>
+</div>
+
+</body>
+</html>

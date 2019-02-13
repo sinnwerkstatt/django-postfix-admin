@@ -1,0 +1,13 @@
+{% extends 'admin/change_form.html' %}
+
+{% block after_related_objects %}
+    {{ block.super }}
+    {% if original.show_aliases %}
+        <h3>Aliases</h3>
+        <ul>
+            {% for alias in original.show_aliases %}
+                <li><a href="{% url 'admin:mail_alias_change' alias.pk %}">{{ alias }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

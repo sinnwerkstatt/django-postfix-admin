@@ -10,9 +10,9 @@ class DomainAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'mailboxes', 'aliases', 'active']
 
 
-@register(AliasDomain)
-class AliasDomainAdmin(admin.ModelAdmin):
-    list_display = ['name', 'target', 'description', 'active']
+# @register(AliasDomain)
+# class AliasDomainAdmin(admin.ModelAdmin):
+#     list_display = ['name', 'target', 'description', 'active']
 
 
 @register(Mailbox)

@@ -57,11 +57,14 @@ class Mailbox(models.Model):
         unique_together = ('name', 'domain')
         verbose_name_plural = 'Mailboxes'
 
+    def show_aliases(self):
+        return Alias.objects.filter(target=f"{self.name}@{self.domain_id}")
+
 
 class Alias(models.Model):
     name = models.CharField(max_length=255)
     domain = models.ForeignKey(Domain, on_delete=models.PROTECT)
-    target = models.CharField(max_length=255)
+    target = models.CharField(max_length=255, help_text='You can specify multiple recipients with commas, i.e.: x@foo.com,y@bar.com')
 
     description = models.CharField(max_length=500, blank=True)
 
