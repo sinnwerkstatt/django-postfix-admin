@@ -63,7 +63,7 @@ class Mailbox(models.Model):
         ordering = ['name']
 
     def show_aliases(self):
-        return Alias.objects.filter(target__icontains=f"{self.name}@{self.domain_id}")
+        return Alias.objects.filter(targets__icontains=f"{self.name}@{self.domain_id}")
 
 
 class Alias(models.Model):
@@ -79,11 +79,12 @@ class Alias(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}@{} → {}".format(self.name, self.domain.name, ",".join(self.targets.split('\n')))
+        return "{}@{} → {}".format(self.name, self.domain.name, self.targets)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         super(Alias, self).save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
     class Meta:
         unique_together = ('name', 'domain')
         verbose_name_plural = 'Aliases'
