@@ -9,6 +9,8 @@ django-environ = "*"
 bcrypt = "*"
 psycopg2-binary = "*"
 
+gunicorn = "*"
+
 [dev-packages]
 ipdb = "*"
 
