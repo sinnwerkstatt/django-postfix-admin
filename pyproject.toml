@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "django-postfix-admin"
+version = "0.1.0"
+description = ""
+authors = ["Andreas Nüßlein <andreas@nuessle.in>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+django = "<2.3"
+django-environ = "*"
+bcrypt = "*"
+psycopg2-binary = "*"
+
+gunicorn = { version = "*", optional = true }
+
+[tool.poetry.dev-dependencies]
+ipdb = "*"
+
+[tool.poetry.extras]
+production = ["gunicorn", "raven"]
+
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

@@ -62,9 +62,9 @@ MANAGERS = ADMINS
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR('static-collected')
-STATICFILES_DIRS = (
-    BASE_DIR('static'),
-)
+# STATICFILES_DIRS = (
+#     BASE_DIR('static'),
+# )
 MEDIA_ROOT = BASE_DIR('media')
 MEDIA_URL = '/media/'
 # LOCALE_PATHS = [BASE_DIR('config/locale')]
