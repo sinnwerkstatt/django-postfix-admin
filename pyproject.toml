@@ -6,7 +6,7 @@ authors = ["Andreas Nüßlein <andreas@nuessle.in>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-django = "<2.3"
+django = "<3.0"
 django-environ = "*"
 bcrypt = "*"
 psycopg2-binary = "*"
@@ -17,7 +17,7 @@ gunicorn = { version = "*", optional = true }
 ipdb = "*"
 
 [tool.poetry.extras]
-production = ["gunicorn", "raven"]
+production = ["gunicorn"]
 
 
 [build-system]
